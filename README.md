@@ -226,17 +226,39 @@ Ahora vamos a crear 3 VMs (VM1, VM2 y VM3) con direcciones IP públicas standar 
 
 ![](images/part2/part2-vm-create1.png)
 
+Vamos a crear la maquina virtal VM1, y luego crearemos el resto de igual forma:
+
+![](images/imgLab9/33.png)
+
+![](images/imgLab9/34.png)
+
 2. En la configuración de networking, verifique que se ha seleccionado la *Virtual Network*  y la *Subnet* creadas anteriormente. Adicionalmente asigne una IP pública y no olvide habilitar la redundancia de zona.
 
 ![](images/part2/part2-vm-create2.png)
+
+Asi queda:
+
+![](images/imgLab9/37.png)
+
+Debemos añadir la ip publica:
+
+![](images/imgLab9/35.png)
 
 3. Para el Network Security Group seleccione "avanzado" y realice la siguiente configuración. No olvide crear un *Inbound Rule*, en el cual habilite el tráfico por el puerto 3000. Cuando cree la VM2 y la VM3, no necesita volver a crear el *Network Security Group*, sino que puede seleccionar el anteriormente creado.
 
 ![](images/part2/part2-vm-create3.png)
 
+Creamos el security group, este nos va a servir para las demas maquinas tambien:
+
+![](images/imgLab9/36.png)
+
 4. Ahora asignaremos esta VM a nuestro balanceador de carga, para ello siga la configuración de la siguiente imágen.
 
 ![](images/part2/part2-vm-create4.png)
+
+Vamos a añadir la maquina virtual ya creada a el balanceador de carga:
+
+![](images/imgLab9/38.png)
 
 5. Finalmente debemos instalar la aplicación de Fibonacci en la VM. para ello puede ejecutar el conjunto de los siguientes comandos, cambiando el nombre de la VM por el correcto
 
@@ -254,7 +276,19 @@ npm install forever -g
 forever start FibonacciApp.js
 ```
 
+![](images/imgLab9/41.png)
+
 Realice este proceso para las 3 VMs, por ahora lo haremos a mano una por una, sin embargo es importante que usted sepa que existen herramientas para aumatizar este proceso, entre ellas encontramos Azure Resource Manager, OsDisk Images, Terraform con Vagrant y Paker, Puppet, Ansible entre otras.
+
+Ahora que ya hicimos toda la creacion y configuracion de la VM1, vamos a seguir con el resto, cabe mencionar que no fue posible crear la VM2 en la zona 2 por limitaciones del propio azure, por tanto solo se crearon 2 maquinas virtuales, VM1 y VM3.
+
+Asi quedo la VM3:
+
+![](images/imgLab9/39.png)
+
+![](images/imgLab9/40.png)
+
+![](images/imgLab9/42.png)
 
 #### Probar el resultado final de nuestra infraestructura
 
@@ -265,7 +299,29 @@ http://52.155.223.248/
 http://52.155.223.248/fibonacci/1
 ```
 
+Probamos que el endpoint, osea la ip publica del balanceador este funcionando:
+
+![](images/imgLab9/43.png)
+
+![](images/imgLab9/44.png)
+
 2. Realice las pruebas de carga con `newman` que se realizaron en la parte 1 y haga un informe comparativo donde contraste: tiempos de respuesta, cantidad de peticiones respondidas con éxito, costos de las 2 infraestrucruras, es decir, la que desarrollamos con balanceo de carga horizontal y la que se hizo con una maquina virtual escalada.
+
+Para el archivo [ARSW_LOAD-BALANCING_AZURE].postman_environment.json cambianos el valor del parámetro loadbalancer para que coincida con la IP de nuestro balanceador:
+
+![](images/imgLab9/45.png)
+
+Ahora ejecutamos con newman:
+
+![](images/imgLab9/46.png)
+
+Los resultados fueron los siguientes:
+
+![](images/imgLab9/47.png)
+
+![](images/imgLab9/48.png)
+
+![](images/imgLab9/49.png)
 
 3. Agregue una 4 maquina virtual y realice las pruebas de newman, pero esta vez no lance 2 peticiones en paralelo, sino que incrementelo a 4. Haga un informe donde presente el comportamiento de la CPU de las 4 VM y explique porque la tasa de éxito de las peticiones aumento con este estilo de escalabilidad.
 
