@@ -170,21 +170,53 @@ Antes de continuar puede eliminar el grupo de recursos anterior para evitar gast
 
 ![](images/part2/part2-lb-create.png)
 
+Vamos a crear el balanceador de carga:
+
+![](images/imgLab9/24.png)
+
+Debemos realizar la configuracion de la ip del balanceador:
+
+![](images/imgLab9/25.png)
+
 2. A continuación cree un *Backend Pool*, guiese con la siguiente imágen.
 
 ![](images/part2/part2-lb-bp-create.png)
+
+Creamos el backend pool:
+
+![](images/imgLab9/26.png)
 
 3. A continuación cree un *Health Probe*, guiese con la siguiente imágen.
 
 ![](images/part2/part2-lb-hp-create.png)
 
+Creamos el health probe: 
+
+![](images/imgLab9/27.png)
+
 4. A continuación cree un *Load Balancing Rule*, guiese con la siguiente imágen.
 
 ![](images/part2/part2-lb-lbr-create.png)
 
+Creamos la Load Balancing Rule:
+
+![](images/imgLab9/28.png)
+
+![](images/imgLab9/29.png)
+
 5. Cree una *Virtual Network* dentro del grupo de recursos, guiese con la siguiente imágen.
 
 ![](images/part2/part2-vn-create.png)
+
+Vamos a crear la virtual network:
+
+![](images/imgLab9/30.png)
+
+Tambien debemos crear una nueva subnet:
+
+![](images/imgLab9/31.png)
+
+![](images/imgLab9/32.png)
 
 #### Crear las maquinas virtuales (Nodos)
 
