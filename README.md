@@ -25,9 +25,11 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
 ![Imágen 1](images/part1/part1-vm-basic-config.png)
 
+Vamos a crear la maquina virtual:
+
 ![](images/imgLab9/1.png)
 
-![](images/imgLab9/22.png)
+![](images/imgLab9/2.png)
 
 2. Para conectarse a la VM use el siguiente comando, donde las `x` las debe remplazar por la IP de su propia VM (Revise la sección "Connect" de la virtual machine creada para tener una guía más detallada).
 
@@ -62,6 +64,8 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 6. Antes de verificar si el endpoint funciona, en Azure vaya a la sección de *Networking* y cree una *Inbound port rule* tal como se muestra en la imágen. Para verificar que la aplicación funciona, use un browser y user el endpoint `http://xxx.xxx.xxx.xxx:3000/fibonacci/6`. La respuesta debe ser `The answer is 8`.
 
 ![](images/part1/part1-vm-3000InboudRule.png)
+
+Vamos a crear la Inbound Port Rule, como se muestra a continuacion:
 
 ![](images/imgLab9/9.png)
 
@@ -117,6 +121,8 @@ Este fue el resultado final:
 10. La cantidad de CPU consumida es bastante grande y un conjunto considerable de peticiones concurrentes pueden hacer fallar nuestro servicio. Para solucionarlo usaremos una estrategia de Escalamiento Vertical. En Azure diríjase a la sección *size* y a continuación seleccione el tamaño `B2ms`.
 
 ![Imágen 3](images/part1/part1-vm-resize.png)
+
+Cambiamos el tamaño de la VM a B2ms:
 
 ![](images/imgLab9/18.png)
 
