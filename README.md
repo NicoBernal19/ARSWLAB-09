@@ -25,11 +25,26 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
 ![Imágen 1](images/part1/part1-vm-basic-config.png)
 
+![](images/imgLab9/1.png)
+
+![](images/imgLab9/22.png)
+
 2. Para conectarse a la VM use el siguiente comando, donde las `x` las debe remplazar por la IP de su propia VM (Revise la sección "Connect" de la virtual machine creada para tener una guía más detallada).
 
     `ssh scalability_lab@xxx.xxx.xxx.xxx`
 
+![](images/imgLab9/3.png)
+
 3. Instale node, para ello siga la sección *Installing Node.js and npm using NVM* que encontrará en este [enlace](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/).
+
+![](images/imgLab9/4.png)
+
+![](images/imgLab9/5.png)
+
+![](images/imgLab9/6.png)
+
+![](images/imgLab9/7.png)
+
 4. Para instalar la aplicación adjunta al Laboratorio, suba la carpeta `FibonacciApp` a un repositorio al cual tenga acceso y ejecute estos comandos dentro de la VM:
 
     `git clone <your_repo>`
@@ -38,6 +53,8 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
     `npm install`
 
+![](images/imgLab9/8.png)
+
 5. Para ejecutar la aplicación puede usar el comando `npm FibinacciApp.js`, sin embargo una vez pierda la conexión ssh la aplicación dejará de funcionar. Para evitar ese compartamiento usaremos *forever*. Ejecute los siguientes comando dentro de la VM.
 
     ` node FibonacciApp.js`
@@ -45,6 +62,12 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 6. Antes de verificar si el endpoint funciona, en Azure vaya a la sección de *Networking* y cree una *Inbound port rule* tal como se muestra en la imágen. Para verificar que la aplicación funciona, use un browser y user el endpoint `http://xxx.xxx.xxx.xxx:3000/fibonacci/6`. La respuesta debe ser `The answer is 8`.
 
 ![](images/part1/part1-vm-3000InboudRule.png)
+
+![](images/imgLab9/9.png)
+
+![](images/imgLab9/10.png)
+
+![](images/imgLab9/11.png)
 
 7. La función que calcula en enésimo número de la secuencia de Fibonacci está muy mal construido y consume bastante CPU para obtener la respuesta. Usando la consola del Browser documente los tiempos de respuesta para dicho endpoint usando los siguintes valores:
     * 1000000
@@ -58,9 +81,17 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
     * 1080000
     * 1090000    
 
+Este fue el resultado:
+
+![](images/imgLab9/12.png)
+
 8. Dírijase ahora a Azure y verifique el consumo de CPU para la VM. (Los resultados pueden tardar 5 minutos en aparecer).
 
 ![Imágen 2](images/part1/part1-vm-cpu.png)
+
+Esta es la grafica obtenida:
+
+![](images/imgLab9/13.png)
 
 9. Ahora usaremos Postman para simular una carga concurrente a nuestro sistema. Siga estos pasos.
     * Instale newman con el comando `npm install newman -g`. Para conocer más de Newman consulte el siguiente [enlace](https://learning.getpostman.com/docs/postman/collection-runs/command-line-integration-with-newman/).
@@ -73,17 +104,43 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
     newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10
     ```
 
+![](images/imgLab9/14.png)
+
+![](images/imgLab9/15.png)
+
+![](images/imgLab9/16.png)
+
+Este fue el resultado final:
+
+![](images/imgLab9/17.png)
+
 10. La cantidad de CPU consumida es bastante grande y un conjunto considerable de peticiones concurrentes pueden hacer fallar nuestro servicio. Para solucionarlo usaremos una estrategia de Escalamiento Vertical. En Azure diríjase a la sección *size* y a continuación seleccione el tamaño `B2ms`.
 
 ![Imágen 3](images/part1/part1-vm-resize.png)
 
+![](images/imgLab9/18.png)
+
 11. Una vez el cambio se vea reflejado, repita el paso 7, 8 y 9.
+
+Repetimos las pruebas y estos fueron los resultados:
+
+![](images/imgLab9/19.png)
+
+![](images/imgLab9/20.png)
+
+![](images/imgLab9/21.png)
+
 12. Evalue el escenario de calidad asociado al requerimiento no funcional de escalabilidad y concluya si usando este modelo de escalabilidad logramos cumplirlo.
 13. Vuelva a dejar la VM en el tamaño inicial para evitar cobros adicionales.
+
+![](images/imgLab9/22.png)
 
 **Preguntas**
 
 1. ¿Cuántos y cuáles recursos crea Azure junto con la VM?
+
+![](images/imgLab9/23.png)
+
 2. ¿Brevemente describa para qué sirve cada recurso?
 3. ¿Al cerrar la conexión ssh con la VM, por qué se cae la aplicación que ejecutamos con el comando `npm FibonacciApp.js`? ¿Por qué debemos crear un *Inbound port rule* antes de acceder al servicio?
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
