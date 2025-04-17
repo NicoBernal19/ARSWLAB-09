@@ -137,6 +137,9 @@ Repetimos las pruebas y estos fueron los resultados:
 ![](images/imgLab9/21.png)
 
 12. Evalue el escenario de calidad asociado al requerimiento no funcional de escalabilidad y concluya si usando este modelo de escalabilidad logramos cumplirlo.
+
+Si, porque al aumentar de tamaño la VM, se puede procesar mayor cantidad y mas rapido las peticiones que lleguen a la app, esto se refleja en el uso de CPU.
+
 13. Vuelva a dejar la VM en el tamaño inicial para evitar cobros adicionales.
 
 ![](images/imgLab9/22.png)
@@ -145,10 +148,24 @@ Repetimos las pruebas y estos fueron los resultados:
 
 1. ¿Cuántos y cuáles recursos crea Azure junto con la VM?
 
+Se crean los siguientes recursos, ademas de la key .pem, que olvidamos poner en la imagen.
+
 ![](images/imgLab9/23.png)
 
 2. ¿Brevemente describa para qué sirve cada recurso?
+
+- Disk: Almacenamiento persistente asociado a una máquina virtual para guardar datos o el sistema operativo.
+- Network Interface (NIC): Interfaz de red que conecta una máquina virtual a una red virtual.
+- Virtual Network (VNet): Red privada en la nube que permite conectar máquinas virtuales y otros recursos de Azure de forma segura.
+- Network Security Group (NSG): Reglas de seguridad que controlan el tráfico entrante y saliente en una red virtual o interfaz de red.
+- Public IP Address: Dirección IP pública asignada a un recurso de Azure para permitir la comunicación desde Internet.
+- SSH Key: Par de claves (pública/privada) utilizadas para autenticarse de forma segura en máquinas virtuales Linux o servicios que soporten SSH.
+
 3. ¿Al cerrar la conexión ssh con la VM, por qué se cae la aplicación que ejecutamos con el comando `npm FibonacciApp.js`? ¿Por qué debemos crear un *Inbound port rule* antes de acceder al servicio?
+
+La aplicacion deja de funcionar al cerrar la conexion con la VM, porque el comando npm FibonacciApp.js funciona para ejecutar la aplicacion en el momento, una vez se apaga la maquina o se cancela el comando la app deja de correr. 
+La Inbound port rule es necesaria porque es lo que permite el flujo correcto de trafico por el puerto indicado, en este caso el 3000, sin esta regla de entrada la app no funcionaria correctamente.
+
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
 5. Adjunte imágen del consumo de CPU de la VM e interprete por qué la función consume esa cantidad de CPU.
 6. Adjunte la imagen del resumen de la ejecución de Postman. Interprete:
@@ -156,7 +173,13 @@ Repetimos las pruebas y estos fueron los resultados:
     * Si hubo fallos documentelos y explique.
 7. ¿Cuál es la diferencia entre los tamaños `B2ms` y `B1ls` (no solo busque especificaciones de infraestructura)?
 8. ¿Aumentar el tamaño de la VM es una buena solución en este escenario?, ¿Qué pasa con la FibonacciApp cuando cambiamos el tamaño de la VM?
+
+No es la mejor solucion, porque no es una solucion precisamente escalable, a pesar de que se aumente el tamaño, la maquina virtual igual tendria problemas de rendimiento y de CPU, si se realizan demasiadas peticiones a la vez o de forma seguida, sobre todo si son numeros altos como 1000000.
+
 9. ¿Qué pasa con la infraestructura cuando cambia el tamaño de la VM? ¿Qué efectos negativos implica?
+
+Cuando se cambia el tamaño de la VM, la maquina virtual se reinicia, y esto a su vez, hace que se cierre la conexion con la maquina y por tanto la app no va a funcionar, hasta que se reinicie.
+
 10. ¿Hubo mejora en el consumo de CPU o en los tiempos de respuesta? Si/No ¿Por qué?
 11. Aumente la cantidad de ejecuciones paralelas del comando de postman a `4`. ¿El comportamiento del sistema es porcentualmente mejor?
 
@@ -335,6 +358,33 @@ newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALAN
 **Preguntas**
 
 * ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
+
+***Tipos de Balanceadores de carga en Azure:***
+  
+a) Azure Load Balancer (Capa 4 - Transporte)
+
+Tipo: Básico y Estándar (dependiendo del SKU).
+
+Función: Distribuye tráfico TCP/UDP a nivel de red (capa 4).
+
+Características: No inspecciona el contenido HTTP/HTTPS. Soporta equilibrio de carga interno (sin IP pública) o público (con IP pública). Usado para alta disponibilidad en máquinas virtuales, escalado de aplicaciones.
+
+b) Azure Application Gateway (Capa 7 - Aplicación)
+
+Tipo: Basado en reglas HTTP/HTTPS.
+
+Función: Balanceo de carga HTTP/HTTPS (capa 7).
+
+Características: Enrutamiento basado en URL, afinidad de sesión, descarga SSL. Ideal para aplicaciones web (como APIs, microservicios).
+
+c) Azure Traffic Manager (DNS-based, Global)
+
+Tipo: Balanceo de carga basado en DNS.
+
+Función: Distribuye tráfico a nivel global entre regiones.
+
+Características: No maneja tráfico directo, solo redirige mediante DNS, usado para alta disponibilidad multi-región.
+
 * ¿Cuál es el propósito del *Backend Pool*?
 * ¿Cuál es el propósito del *Health Probe*?
 * ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
