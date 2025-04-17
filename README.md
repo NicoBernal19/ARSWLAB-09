@@ -169,10 +169,44 @@ La aplicacion deja de funcionar al cerrar la conexion con la VM, porque el coman
 La Inbound port rule es necesaria porque es lo que permite el flujo correcto de trafico por el puerto indicado, en este caso el 3000, sin esta regla de entrada la app no funcionaria correctamente.
 
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
+
+La aplicacion tarda tanto en calcular el resultado de numeros grandes porque se esta calculando toda la secuencia de numeros de Fibonacci hasta el numero ingresado, y eso son muchisimos numeros y por ende muchos calculos. Aun asi al aumentar de tamaño la maquina virtual si se refleja una mejora.
+
+Con tamaño B1ls:
+
+![](images/imgLab9/12.png)
+
+Con tamaño B2ms:
+
+![](images/imgLab9/19.png)
+
 5. Adjunte imágen del consumo de CPU de la VM e interprete por qué la función consume esa cantidad de CPU.
+
+La aplicacion consume esa cantidad de CPU porque como se menciono anteriormente se estan realizando muchos calculos bastante grandes, y por ende se requiere de cierto cantidad de CPU. De nuevo, se puede reflejar un cambio al aumentar el tamaño de la VM.
+
+Con tamaño B1ls:
+
+![](images/imgLab9/13.png)
+
+Con tamaño B2ms:
+
+![](images/imgLab9/20.png)
+
 6. Adjunte la imagen del resumen de la ejecución de Postman. Interprete:
     * Tiempos de ejecución de cada petición.
     * Si hubo fallos documentelos y explique.
+
+Se puede ver que cada peticion tomaba mas o menos el mismo tiempo, tambien se puede observar que al aumentar el tamaño de la VM, hubo una mejora en cuanto al tiempo requerido para procesar todas las peticiones.
+No hubo en ninguno de los dos casos ningun fallo que pudiera ser documentado.
+
+Con tamaño B1ls:
+
+![](images/imgLab9/17.png)
+
+Con tamaño B2ms:
+
+![](images/imgLab9/21.png)
+
 7. ¿Cuál es la diferencia entre los tamaños `B2ms` y `B1ls` (no solo busque especificaciones de infraestructura)?
 8. ¿Aumentar el tamaño de la VM es una buena solución en este escenario?, ¿Qué pasa con la FibonacciApp cuando cambiamos el tamaño de la VM?
 
@@ -183,6 +217,9 @@ No es la mejor solucion, porque no es una solucion precisamente escalable, a pes
 Cuando se cambia el tamaño de la VM, la maquina virtual se reinicia, y esto a su vez, hace que se cierre la conexion con la maquina y por tanto la app no va a funcionar, hasta que se reinicie.
 
 10. ¿Hubo mejora en el consumo de CPU o en los tiempos de respuesta? Si/No ¿Por qué?
+
+Si, porque con el aumento del tamaño de la VM, se puede usar mas cantidad de CPU, lo que genera mayor velocidad y eficiencia para dar respuesta a las peticiones, en este caso es mas rapido completar la secuencia de Fibonacci hasta el numero indicado.
+
 11. Aumente la cantidad de ejecuciones paralelas del comando de postman a `4`. ¿El comportamiento del sistema es porcentualmente mejor?
 
 ### Parte 2 - Escalabilidad horizontal
