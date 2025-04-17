@@ -385,6 +385,20 @@ Función: Distribuye tráfico a nivel global entre regiones.
 
 Características: No maneja tráfico directo, solo redirige mediante DNS, usado para alta disponibilidad multi-región.
 
+***Que es un SKU, tipos y diferencias***
+
+SKU (Stock Keeping Unit) en Azure define el nivel de rendimiento, características y costo de un recurso.
+
+![image](https://github.com/user-attachments/assets/7769bca4-f4c7-494f-b204-1d78767d6886)
+
+***Por que el balanceador de carga necesita una ip publica?***
+
+El balanceador de carga público de Azure necesita una IP pública porque:
+
+- Acceso desde Internet: La IP pública permite que usuarios externos accedan a los servicios detrás del balanceador.
+- Enrutamiento del tráfico: Asigna una dirección fija (si es Estándar) o dinámica (si es Básico) para redirigir solicitudes.
+- Reglas NAT: Permite configurar reglas de traducción de puertos (ej: redirigir puerto 80 → VM en puerto 8080).
+
 * ¿Cuál es el propósito del *Backend Pool*?
 * ¿Cuál es el propósito del *Health Probe*?
 * ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
