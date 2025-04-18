@@ -208,6 +208,26 @@ Con tamaño B2ms:
 ![](images/imgLab9/21.png)
 
 7. ¿Cuál es la diferencia entre los tamaños `B2ms` y `B1ls` (no solo busque especificaciones de infraestructura)?
+
+La principal diferencia entre B2ms y B1ls en Azure (más allá de las especificaciones técnicas) es su enfoque de uso:
+
+- ***B2ms:*** Es una máquina balanceada (CPU/memoria) para cargas de trabajo generales con rendimiento moderado y consistente. Ideal para aplicaciones web medianas o entornos de prueba/productivos pequeños.
+
+- ***B1ls:*** Es una máquina económica y ligera, diseñada para cargas de trabajo ligeras o temporales (ej. desarrollo, tareas puntuales). Tiene menos recursos y es la opción más barata de la serie B.
+
+| Característica       | B1ls                              | B2ms                              |
+|----------------------|-----------------------------------|-----------------------------------|
+| **Tipo de uso**      | Cargas ligeras/temporales         | Cargas moderadas/estables         |
+| **vCPUs**            | 1                                 | 2                                 |
+| **Memoria (RAM)**    | 0.5 GiB                           | 8 GiB                             |
+| **Almacenamiento**   | SSD Temporal (varía)              | SSD Temporal (varía)              |
+| **Rendimiento**      | Burstable (límite bajo)           | Burstable (mejor capacidad)       |
+| **Costo aproximado** | ~$5 USD/mes*                      | ~$50 USD/mes*                     |
+| **Ideal para**       | - Pruebas puntuales<br>- APIs simples<br>- Desarrollo | - Apps web pequeñas<br>- Bases de datos básicas<br>- Staging |
+| **SLA**             | Limitado                          | Estándar (99.9% con redundancia)  |
+
+\* Precios referenciales (pueden variar por región y descuentos).
+
 8. ¿Aumentar el tamaño de la VM es una buena solución en este escenario?, ¿Qué pasa con la FibonacciApp cuando cambiamos el tamaño de la VM?
 
 No es la mejor solucion, porque no es una solucion precisamente escalable, a pesar de que se aumente el tamaño, la maquina virtual igual tendria problemas de rendimiento y de CPU, si se realizan demasiadas peticiones a la vez o de forma seguida, sobre todo si son numeros altos como 1000000.
@@ -394,6 +414,8 @@ newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALAN
 newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10
 ```
 
+En este caso fue imposible agregar una cuarta maquina virtual, porque la suscripcion de la universidad, solo permite tener 3 IPs publicas a la vez, por eso este punto no se puede realizar.
+
 **Preguntas**
 
 * ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
@@ -428,7 +450,12 @@ Características: No maneja tráfico directo, solo redirige mediante DNS, usado 
 
 SKU (Stock Keeping Unit) en Azure define el nivel de rendimiento, características y costo de un recurso.
 
-![image](https://github.com/user-attachments/assets/7769bca4-f4c7-494f-b204-1d78767d6886)
+| SKU                     | Básico                          | Estándar                        | Gateway (Application Gateway)    |
+|-------------------------|---------------------------------|---------------------------------|----------------------------------|
+| **Disponibilidad**      | Redundancia básica             | Zonas de disponibilidad (HA)    | Alta disponibilidad (HA)         |
+| **Rendimiento**         | Limitado                       | Alto rendimiento, escalado automático | Optimizado para HTTP(S)         |
+| **IP Pública**          | Dinámica (cambia)              | Estática (fija)                 | Requiere IP pública             |
+| **Precio**              | Más económico                  | Más costoso (más características) | Depende de las reglas           |
 
 ***Por que el balanceador de carga necesita una ip publica?***
 
@@ -439,11 +466,41 @@ El balanceador de carga público de Azure necesita una IP pública porque:
 - Reglas NAT: Permite configurar reglas de traducción de puertos (ej: redirigir puerto 80 → VM en puerto 8080).
 
 * ¿Cuál es el propósito del *Backend Pool*?
+
+El propósito principal del Backend Pool es agrupar y administrar los servidores o recursos de destino que recibirán el tráfico enviado a través de un balanceador de carga o una puerta de enlace, como Azure Load Balancer. El Backend Pool actúa como el "grupo de servidores destino" que procesará las solicitudes, permitiendo balanceo de carga, alta disponibilidad y gestión centralizada.
+
 * ¿Cuál es el propósito del *Health Probe*?
+
+El propósito del Health Probe es monitorear continuamente el estado y disponibilidad de los recursos (servidores, servicios o instancias) dentro de un Backend Pool, asegurando que el tráfico solo se envíe a nodos saludables. El Health Probe garantiza que el tráfico solo llegue a recursos operativos, mejorando la confiabilidad y disponibilidad del servicio.
+
 * ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
+
+La Load Balancing Rule define cómo se distribuye el tráfico entrante entre los servidores del Backend Pool, basándose en criterios como pueden ser el protocolo o el puerto. Su objetivo principal es optimizar el uso de recursos, evitar sobrecargas y garantizar alta disponibilidad.
+
+La persistencia de sesión asegura que las solicitudes de un mismo cliente sean dirigidas siempre al mismo servidor backend. Esto es crucial para aplicaciones que almacenan datos de sesión localmente. Es importante porque evita que usuarios pierdan datos almacenados localmente. Puede afectar a la escalabilidad del sistema cuando muchos clientes persistentes se asignan a un mismo backend, porque esto puede causar saturacion.
+
 * ¿Qué es una *Virtual Network*? ¿Qué es una *Subnet*? ¿Para qué sirven los *address space* y *address range*?
+
+Una Virtual Network es una red privada y aislada en la nube (ej.: Azure, AWS, GCP) que permite conectar recursos de forma segura. Funciona como una red LAN tradicional pero con ventajas de escalabilidad y gestión cloud. 
+
+Una subred es una división lógica dentro de una Virtual Network que segmenta el espacio de direcciones IP para organizar recursos y aplicar políticas de seguridad específicas.
+
+***Address space:*** Es el rango IP principal asignado a una Virtual Network, define el "tamaño" total de la red. Es importante recalcar que debe ser único y no superponerse con otras redes, ademas, no se puede modificar después de crear la VNet.
+
+***Address range:*** Es el subconjunto de IPs asignado a una Subnet dentro del Address Space. Es importante tener en cuenta que no puede superponerse con otras subredes en la misma VNet.
+
 * ¿Qué son las *Availability Zone* y por qué seleccionamos 3 diferentes zonas?. ¿Qué significa que una IP sea *zone-redundant*?
+
+Las Availability Zones son centros de datos físicamente separados dentro de una misma región cloud como puede ser europa del norte o el este de estados unidos, diseñados para garantizar alta disponibilidad y tolerancia a fallos.
+
+Manejar 3 zonas distintas es una buena practica porque permite distribuir cargas de trabajo en al menos 2 AZs para tolerar fallos, osea que si una falla, las otras dos van a mantener el servicio funcionando.
+
+Una IP zone-redundant es una dirección IP pública que se distribuye automáticamente entre múltiples Availability Zones, garantizando continuidad incluso si una zona falla. Si una AZ deja de responder, el tráfico se redirige a las demás zonas sin intervención manual.
+
 * ¿Cuál es el propósito del *Network Security Group*?
+
+Un Network Security Group es un firewall virtual que filtra el tráfico de red hacia y desde recursos en una nube. Su objetivo principal es controlar el acceso a los recursos mediante reglas de seguridad que permiten o deniegan comunicaciones basadas en direcciones IP, puertos y protocolos. Los NSGs son la primera línea de defensa en redes cloud, proporcionando un control básico pero esencial del tráfico.
+
 * Informe de newman 1 (Punto 2)
 * Presente el Diagrama de Despliegue de la solución.
 
