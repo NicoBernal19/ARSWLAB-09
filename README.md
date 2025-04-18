@@ -502,8 +502,12 @@ Una IP zone-redundant es una dirección IP pública que se distribuye automátic
 Un Network Security Group es un firewall virtual que filtra el tráfico de red hacia y desde recursos en una nube. Su objetivo principal es controlar el acceso a los recursos mediante reglas de seguridad que permiten o deniegan comunicaciones basadas en direcciones IP, puertos y protocolos. Los NSGs son la primera línea de defensa en redes cloud, proporcionando un control básico pero esencial del tráfico.
 
 * Informe de newman 1 (Punto 2)
+
+El escalamiento Horizontal muestra ser algo mas efectivo que el escalamiento vertical, no solo porque distribuye el uso de la CPU entre varias maquinas, a diferencia del escalamiento vertical en donde solo una maquina (de mayor tamaño) se encarga de todo, tambien hay que tener en cuenta que al contar con distintas maquinas en distintas zonas esto abre la posibilidad de que si algo le pasa a una maquina el servicio pueda seguir corriendo gracias a que hay otra, algo que no es posible en el escalamiento vertical. En los dos casos se trabajo con 2 y 4 peticiones paralelas y las dos respondieron relativamente bien, en ningun caso hubo algun fallo o una peticion que no se pudiera contestar.
+
 * Presente el Diagrama de Despliegue de la solución.
 
+![image](https://github.com/user-attachments/assets/e3e0d174-c87b-4132-9ee3-4b62fc23c8a4)
 
 
 
